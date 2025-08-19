@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 50e79dc5ccb4cb943bb067ee53cb8461
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238140
+  packageName: PBR Rigged Flails
+  packageVersion: 1.0
+  assetPath: Assets/SubstanceAssets/FlailMace/Materials/Dark.mat
+  uploadId: 540516

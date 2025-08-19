@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 383804eed9020584dbe4cfa9d5c58663
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238140
+  packageName: PBR Rigged Flails
+  packageVersion: 1.0
+  assetPath: Assets/SubstanceAssets/FlailMace/Materials/Rusty.mat
+  uploadId: 540516
