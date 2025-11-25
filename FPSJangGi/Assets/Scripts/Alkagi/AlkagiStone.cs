@@ -154,122 +154,95 @@ public class AlkagiStone : MonoBehaviourPun
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.CompareTag("Ground")) return;
-        if (collision.transform.CompareTag("dest")) return ;
-
+        if (collision.transform.CompareTag("dest")) return;
         if (collision.transform.parent == null) return;
-
         if (battleManager.isbattle) return;
         if (!battleManager.isup) return;
 
         if (PhotonNetwork.IsMasterClient)
         {
             if (turnManager.isMasterTurn && !isShot) return;
-           
         }
         else
         {
-            if(!turnManager.isMasterTurn && !isShot) return;
+            if (!turnManager.isMasterTurn && !isShot) return;
         }
-
-
-
 
         if (battleManager.endbattle) return;
 
-
-        
         string myTeamTag = transform.parent.tag;
         string otherTeamTag = collision.transform.parent.tag;
 
         if (myTeamTag == otherTeamTag) return;
-        string hantag;
-        string chotag;
-        if (turnManager.isMasterTurn)
-        {
-            hantag = gameObject.tag;
-            chotag = collision.transform.tag;
-        }
-        else
-        {
-            chotag = gameObject.tag;
-            hantag = collision.transform.tag;
-        }
 
-
-
-        // 충돌한 Rigidbody
+        // 충돌한 Rigidbody 가져오기
         Rigidbody otherRb = collision.rigidbody;
         if (otherRb == null) return;
+
         battleManager.isbattle = true;
-        PhotonView battleManagerView = battleManager.GetComponent<PhotonView>();
-        PhotonView battleSpawnerView = battleSpawner.GetComponent<PhotonView>();
-        Debug.Log("EKr!");
 
+        // 힘 계산
+        Vector3 impulse = collision.impulse;
+        Vector3 direction = impulse.normalized;
+        Vector3 reverseDirection = -direction;
 
+        battleManager.Force = force;
+        battleManager.YouForce = impulse.magnitude;
+        battleManager.YouForceDirection = direction;
+        battleManager.MyForce = impulse.magnitude;
+        battleManager.MyForceDirection = reverseDirection;
+        PhotonView bmPV = battleManager.GetComponent<PhotonView>();
+        if (bmPV != null)
+        {
+            // battleManager의 모든 관련 변수를 MasterClient에게 전달합니다.
+            bmPV.RPC("SyncBattleForces", RpcTarget.MasterClient,
+                     battleManager.Force,
+                     battleManager.YouForce,
+                     battleManager.YouForceDirection,
+                     battleManager.MyForce,
+                     battleManager.MyForceDirection,
+                     battleManager.myViewID,
+                     battleManager.yourViewID);         // View IDs (2 ints)
+        }
 
+        // Rigidbody 저장
+        battleManager.my = GetComponent<Rigidbody>();
+        battleManager.your = otherRb;
+
+        // BattleSpawner 태그
         if (gameObject.transform.parent.CompareTag("han"))
         {
-            Vector3 relativeVelocity = collision.relativeVelocity;
-            Vector3 impulse = collision.impulse;
-            Vector3 direction = impulse.normalized;  // 내가 준 힘 방향
-            Vector3 reverseDirection = -direction;   // 내가 받은 반작용 방향
-            battleManager.Force = force;
-            battleManager.YouForce = impulse.magnitude ;
-            battleManager.YouForceDirection = direction;
-            battleManager.MyForce = impulse.magnitude ;
-            battleManager.MyForceDirection = reverseDirection;
-            Rigidbody aRb = gameObject.GetComponent<Rigidbody>();
-            Rigidbody bRb = collision.gameObject.GetComponent<Rigidbody>();
-            battleManager.my = aRb;
-            battleManager.your = bRb;
             battleSpawner.hantag = transform.tag;
             battleSpawner.chotag = collision.transform.tag;
-            Debug.Log("저장함1");
         }
         else
         {
-            Vector3 relativeVelocity = collision.relativeVelocity;
-            Vector3 impulse = collision.impulse;
-            Vector3 direction = impulse.normalized;  // 내가 준 힘 방향
-            Vector3 reverseDirection = -direction;   // 내가 받은 반작용 방향
-            battleManager.Force = force;
-            battleManager.YouForce = impulse.magnitude ;
-            battleManager.YouForceDirection = direction;
-            battleManager.MyForce = impulse.magnitude ;
-            battleManager.MyForceDirection = reverseDirection;
-            Rigidbody aRb = gameObject.GetComponent<Rigidbody>();
-            Rigidbody bRb = collision.gameObject.GetComponent<Rigidbody>();
-            battleManager.my = aRb;
-            battleManager.your = bRb;
             battleSpawner.chotag = transform.tag;
             battleSpawner.hantag = collision.transform.tag;
-            Debug.Log("저장2");
         }
 
-        if (battleSpawner.sexton == false)
+        // 스톤 소환
+        if (!battleSpawner.sexton)
         {
             battleSpawner.stoneSpawn();
-            Debug.Log("소환 호출");
             battleSpawner.sexton = true;
         }
 
-        // 두 돌의 ViewID를 넘겨서 RPC에서 정지 처리
-        int myViewID = photonView.ViewID;
-        PhotonView otherView = otherRb.GetComponent<PhotonView>();
-        if (otherView == null) return;
+        // ViewID 저장 (알까기 돌 기준)
+        battleManager.myViewID = photonView.ViewID;
+        PhotonView otherPV = otherRb.GetComponent<PhotonView>();
+        if (otherPV != null)
+            battleManager.yourViewID = otherPV.ViewID;
 
-        int otherViewID = otherView.ViewID;
+        // 배틀 시작
+        battleManager.GetComponent<PhotonView>().RPC("StartBattle", RpcTarget.All);
 
-        //배틀 시작 함수 요청
-        battleManagerView.RPC("StartBattle", RpcTarget.All);
-        //배틀 스톤 소환 요청
+        // 게임 정지 RPC
+        photonView.RPC("PauseGame", RpcTarget.All, battleManager.myViewID, battleManager.yourViewID);
 
-
-
-        // 모든 클라이언트에게 요청
-        photonView.RPC("PauseGame", RpcTarget.All, myViewID, otherViewID);
         battleManager.endbattle = false;
     }
+
 
     [PunRPC]
     private void PauseGame(int myViewID, int otherViewID)
@@ -318,14 +291,6 @@ public class AlkagiStone : MonoBehaviourPun
     }
 
 
-
-    //[PunRPC]
-    //void www(int targetViewID)
-    //{
-    //    Debug.Log("깔@롱");
-    //    if (photonView.ViewID != targetViewID) return; // 내가 타겟이 아니면 무시
-    //    else rb.AddForce(-battleManager.Force, ForceMode.Impulse);
-    //}
     public IEnumerator CheckStoneStopped()
     {
 

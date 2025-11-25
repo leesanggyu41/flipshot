@@ -56,7 +56,37 @@ public class rocket : MonoBehaviourPun, IPunInstantiateMagicCallback
         // ¸ðµç Å¬¶óÀÌ¾ðÆ®°¡ ÀÚ½Å È­¸é¿¡¼­¸¸ ÃÑ¾ËÀ» ¿òÁ÷ÀÓ
         transform.position -= transform.forward * speed * Time.deltaTime;
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "shield")
+        {
+            shld rr = other.transform.GetComponent<shld>();
+            while (rr == null)
+            {
+                Debug.Log("ekrsss");
+                rr = other.transform.GetComponent<shld>();
+            }
+            PhotonView aa = rr.transform.GetComponent<PhotonView>();
 
+            aa.RPC("Dameged", RpcTarget.Others, DMG);
+            DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                yas.gameObject.transform.Rotate(90, 0, -90);
+            }
+            else
+            {
+                yas.gameObject.transform.Rotate(90, 180, -90);
+            }
+
+            if (photonView.IsMine)
+            {
+                if (skill != null) skill.Hit();
+                PhotonNetwork.Destroy(gameObject);
+            }
+        }
+    }
     void OnCollisionEnter(Collision collision)
     {
 
@@ -86,7 +116,7 @@ public class rocket : MonoBehaviourPun, IPunInstantiateMagicCallback
         {
             return;
         }
-        else if (collision.transform.tag == "die")
+        else if (collision.transform.tag == "die" || collision.transform.tag == "infinity")
         {
             return;
         }
@@ -195,34 +225,36 @@ public class rocket : MonoBehaviourPun, IPunInstantiateMagicCallback
 
             }
         }
-        else if (collision.transform.tag == "shield")
-        {
-            shld rr = collision.transform.GetComponent<shld>();
-            while (rr == null)
-            {
-                rr = collision.transform.GetComponent<shld>();
-            }
-            PhotonView aa = rr.transform.GetComponent<PhotonView>();
-            aa.RPC("Dameged", RpcTarget.Others, DMG);
-            DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
+        //else if (collision.transform.tag == "shield")
+        //{
+        //    shld rr = collision.transform.GetComponent<shld>();
+        //    while (rr == null)
+        //    {
+        //        Debug.Log("ekrsss");
+        //        rr = collision.transform.GetComponent<shld>();
+        //    }
+        //    PhotonView aa = rr.transform.GetComponent<PhotonView>();
 
-            if (PhotonNetwork.IsMasterClient)
-            {
-                yas.gameObject.transform.Rotate(90, 0, -90);
-            }
-            else
-            {
-                yas.gameObject.transform.Rotate(90, 180, -90);
-            }
+        //    aa.RPC("Dameged", RpcTarget.Others, DMG);
+        //    DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
 
-            if (photonView.IsMine)
-            {
-                if (skill != null) skill.Hit();
-                GameObject boom = PhotonNetwork.Instantiate(particle.name, transform.position, Quaternion.Euler(0, 0, 0));//Ã£Àº ÇÁ¸®ÆÕ ¼îÄ­!
-                PhotonNetwork.Destroy(gameObject);
-            }
-        }
-        
+        //    if (PhotonNetwork.IsMasterClient)
+        //    {
+        //        yas.gameObject.transform.Rotate(90, 0, -90);
+        //    }
+        //    else
+        //    {
+        //        yas.gameObject.transform.Rotate(90, 180, -90);
+        //    }
+
+        //    if (photonView.IsMine)
+        //    {
+        //        if (skill != null) skill.Hit();
+        //        GameObject boom = PhotonNetwork.Instantiate(particle.name, transform.position, Quaternion.Euler(0, 0, 0));//Ã£Àº ÇÁ¸®ÆÕ ¼îÄ­!
+        //        PhotonNetwork.Destroy(gameObject);
+        //    }
+        //}
+
 
 
     }

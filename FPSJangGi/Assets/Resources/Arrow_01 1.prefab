@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 2654494353937170215}
   - component: {fileID: 6576108768569663790}
   - component: {fileID: 4281583444846956526}
-  - component: {fileID: 1780043136691891617}
   m_Layer: 0
   m_Name: Arrow_01 1
   m_TagString: bullet
@@ -181,25 +180,6 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &1780043136691891617
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2146846341423121111}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5f6ac637093d504b8e82ae78d0b75fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  number: {fileID: 8779112907526217279, guid: 097a21caf251b094cb08daa1483eed5f, type: 3}
-  speed: 8
-  DMG: 25
-  trans: {fileID: 0}
-  ta: 0
-  GGori: {fileID: 0}
-  cri: 0
 --- !u!1 &7610292889903860986
 GameObject:
   m_ObjectHideFlags: 0

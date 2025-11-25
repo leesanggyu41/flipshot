@@ -203,7 +203,15 @@ public class BattleStone : MonoBehaviourPun
 
 
     }
-
+    [PunRPC]
+    public void ApplyImpulse(Vector3 dir, float magnitude)
+    {
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.AddForce(dir.normalized * magnitude, ForceMode.Impulse);
+        }
+    }
     IEnumerator Fire1()
     {
         isfire = true;
@@ -335,19 +343,17 @@ public class BattleStone : MonoBehaviourPun
 
 
     [PunRPC]
-    public void dokkislow(int dmg)
+    public void dokkislow(float dmg)
     {
-        
-        Debug.Log("데미지띄우기");
-        HP -= dmg;
-        moveSpeed -= 0.5f;
+        HP -= (int)dmg;
+        photonView.RPC("hpview", RpcTarget.Others, HP);
         StartCoroutine(slow());
 
     }
 
     IEnumerator slow()
     {
-
+        moveSpeed -= 0.5f;
         
         yield return new WaitForSeconds(2);
         

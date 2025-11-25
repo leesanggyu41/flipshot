@@ -103,6 +103,17 @@ MonoBehaviour:
   - ani1
   - ani2
   - hpview
+  - shiler
+  - unshiler
+  - attecool
+  - Alkagimove1
+  - ApplyImpulse
+  - AgreeToSkipRPC
+  - AgreeToSuddenDeathRPC
+  - StartSuddenDeathRPC
+  - SyncBattleForces
+  - SyncVelocityAfterForce
+  - resettt
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

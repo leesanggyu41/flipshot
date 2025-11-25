@@ -41,19 +41,23 @@ public class dokki : MonoBehaviourPun
 
     private void OnTriggerEnter(Collider other)
     {
+
         if (other.tag == "Ground")
         {
             return;
         }
-        else if (other.tag == "hanbullet" || other.tag == "chobullet" || other.tag == "bullet" || other.tag =="die")
+        else if (other.tag == "hanbullet" || other.tag == "chobullet" || other.tag == "bullet" || other.tag == "infinity")
         {
 
             return;
         }
-        
+        else if (other.tag == "die")
+        {
+            return;
+        }
         if (other.tag == "wang")
         {
-            
+
             goung aa = other.gameObject.GetComponent<goung>();
             while (aa == null)
             {
@@ -61,47 +65,8 @@ public class dokki : MonoBehaviourPun
 
             }
             PhotonView rr = aa.gameObject.GetComponent<PhotonView>();
-            
-            if (aa.HP <= 50)
-            {
-                rr.RPC("dokkislow", RpcTarget.Others, (float)DMG * 0.7f);
-                DamageNumber yas = number.Spawn(gameObject.transform.position, (int)DMG * 0.7f);
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    yas.gameObject.transform.Rotate(90, 0, -90);
-                }
-                else
-                {
-                    yas.gameObject.transform.Rotate(90, 180, -90);
-                }
-            }
-            else
-            {
-                rr.RPC("dokkislow", RpcTarget.Others, (float)DMG);
-                DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    yas.gameObject.transform.Rotate(90, 0, -90);
-                }
-                else
-                {
-                    yas.gameObject.transform.Rotate(90, 180, -90);
-                }
-            }
-        }
-        else if (other.tag == "sang")
-        {
-            
-            battlesang aa = other.gameObject.GetComponent<battlesang>();
-            while (aa == null)
-            {
-                aa = other.gameObject.GetComponent<battlesang>();
 
-            }
-            PhotonView rr = aa.gameObject.GetComponent<PhotonView>();
-            rr.RPC("dokkislow", RpcTarget.Others, DMG);
             DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
-
             if (PhotonNetwork.IsMasterClient)
             {
                 yas.gameObject.transform.Rotate(90, 0, -90);
@@ -110,30 +75,12 @@ public class dokki : MonoBehaviourPun
             {
                 yas.gameObject.transform.Rotate(90, 180, -90);
             }
-        }
-        else if (other.tag != "sang" || other.tag != "wang" || other.tag != "Ground")
-        {
-            
-            BattleStone aa = other.gameObject.GetComponent<BattleStone>();
-            while (aa == null)
-            {
-                aa = other.gameObject.GetComponent<BattleStone>();
 
-            }
-            PhotonView rr = aa.gameObject.GetComponent<PhotonView>();
-            rr.RPC("dokkislow", RpcTarget.Others, DMG);
-            DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
+            rr.RPC("Dameged", RpcTarget.Others, (float)DMG);
 
-            if (PhotonNetwork.IsMasterClient)
-            {
-                yas.gameObject.transform.Rotate(90, 0, -90);
-            }
-            else
-            {
-                yas.gameObject.transform.Rotate(90, 180, -90);
-            }
+            return;
         }
-        else if(other.tag == "shield")
+        else if (other.tag == "shield")
         {
             shld rr = other.transform.GetComponent<shld>();
             while (rr == null)
@@ -153,14 +100,56 @@ public class dokki : MonoBehaviourPun
                 yas.gameObject.transform.Rotate(90, 180, -90);
             }
 
-            if (photonView.IsMine)
+            return;
+        }
+        else if (other.tag == "sang")
+        {
+
+            battlesang aa = other.gameObject.GetComponent<battlesang>();
+            while (aa == null)
             {
-                
-                PhotonNetwork.Destroy(gameObject);
+                aa = other.gameObject.GetComponent<battlesang>();
+
             }
+            PhotonView rr = aa.gameObject.GetComponent<PhotonView>();
+            rr.RPC("Dameged", RpcTarget.Others, DMG);
+            DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                yas.gameObject.transform.Rotate(90, 0, -90);
+            }
+            else
+            {
+                yas.gameObject.transform.Rotate(90, 180, -90);
+            }
+            return;
+        }
+        else if (other.tag != "sang" || other.tag != "wang" || other.tag != "ground")
+        {
+
+            BattleStone aa = other.gameObject.GetComponent<BattleStone>();
+            while (aa == null)
+            {
+                aa = other.gameObject.GetComponent<BattleStone>();
+
+            }
+            PhotonView rr = aa.gameObject.GetComponent<PhotonView>();
+            rr.RPC("Dameged", RpcTarget.Others, DMG);
+            DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                yas.gameObject.transform.Rotate(90, 0, -90);
+            }
+            else
+            {
+                yas.gameObject.transform.Rotate(90, 180, -90);
+            }
+            return;
         }
     }
 
-    
+
 
 }

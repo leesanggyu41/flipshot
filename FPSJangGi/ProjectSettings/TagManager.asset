@@ -25,6 +25,9 @@ TagManager:
   - shield
   - bullet
   - die
+  - Bullet
+  - FxTemporaire
+  - infinity
   layers:
   - Default
   - TransparentFX
@@ -41,7 +44,7 @@ TagManager:
   - hanshil
   - choshil
   - diestone
-  - 
+  - infinity
   - 
   - 
   - 

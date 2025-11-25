@@ -16,7 +16,7 @@ public class weapon : MonoBehaviourPun
         {
             return;
         }
-        else if (collision.transform.tag == "hanbullet" || collision.transform.tag == "chobullet" || collision.transform.tag == "bullet")
+        else if (collision.transform.tag == "hanbullet" || collision.transform.tag == "chobullet" || collision.transform.tag == "bullet" || collision.transform.tag == "infinity")
         {
             return;
         }

@@ -93,6 +93,7 @@ public class shld : MonoBehaviourPun, IPunInstantiateMagicCallback
         {
             mast = transform.parent.GetComponent<battlesang>();
         }
+        
         if (HP <= 0 && !dir)
         {
             dir = true;
@@ -101,7 +102,7 @@ public class shld : MonoBehaviourPun, IPunInstantiateMagicCallback
         }
     }
     [PunRPC]
-    public void Damegede(int dmg)
+    public void Dameged(int dmg)
     {
         Debug.Log("º¸È£¸· ±úÁü");
         Debug.Log(dmg);
@@ -128,8 +129,9 @@ public class shld : MonoBehaviourPun, IPunInstantiateMagicCallback
             yield return null;
 
         }
+        PhotonView mastview = mast.GetComponent<PhotonView>();
         mast.opensh = false;
-        
+        mastview.RPC("unshiler", RpcTarget.All);
         PhotonNetwork.Destroy(gameObject);
     }
 }

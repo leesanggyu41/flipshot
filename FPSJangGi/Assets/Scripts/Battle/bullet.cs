@@ -68,14 +68,52 @@ public class Bullet : MonoBehaviourPun, IPunInstantiateMagicCallback
 
     void Update()
     {
-        if(skill == null)
+        // 만약 trans가 이미 파괴됐다면 총알도 바로 제거
+        if (trans == null || trans.Equals(null))
         {
-        skill = trans.GetComponent<sklli>();
+            if (gameObject != null)
+                Destroy(gameObject);
+            return;
         }
 
-        // 모든 클라이언트가 자신 화면에서만 총알을 움직임
+        if (skill == null)
+        {
+            skill = trans.GetComponent<sklli>();
+        }
+
+        // 총알 이동
         transform.position += transform.up * speed * Time.deltaTime;
-        
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+         if (other.transform.tag == "shield")
+        {
+            shld rr = other.transform.GetComponent<shld>();
+            while (rr == null)
+            {
+                Debug.Log("ekrsss");
+                rr = other.transform.GetComponent<shld>();
+            }
+            PhotonView aa = rr.transform.GetComponent<PhotonView>();
+
+            aa.RPC("Dameged", RpcTarget.Others, DMG);
+            DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                yas.gameObject.transform.Rotate(90, 0, -90);
+            }
+            else
+            {
+                yas.gameObject.transform.Rotate(90, 180, -90);
+            }
+
+            if (photonView.IsMine)
+            {
+                if (skill != null) skill.Hit();
+                PhotonNetwork.Destroy(gameObject);
+            }
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -100,16 +138,16 @@ public class Bullet : MonoBehaviourPun, IPunInstantiateMagicCallback
         }
         else if (collision.transform.CompareTag("wang"))
         {
-            
-            
+
+
             goung aa = collision.transform.GetComponent<goung>();
             while (aa == null)
             {
-                 aa = collision.transform.GetComponent<goung>();
-                 
+                aa = collision.transform.GetComponent<goung>();
+
             }
             PhotonView rr = aa.transform.GetComponent<PhotonView>();
-            
+
 
             if (aa.HP <= 50)
             {
@@ -148,8 +186,8 @@ public class Bullet : MonoBehaviourPun, IPunInstantiateMagicCallback
         }
         else if (collision.transform.tag == "sang")
         {
-            
-            
+
+
             battlesang aa = collision.transform.GetComponent<battlesang>();
             while (aa == null)
             {
@@ -169,28 +207,6 @@ public class Bullet : MonoBehaviourPun, IPunInstantiateMagicCallback
             {
                 yas.gameObject.transform.Rotate(90, 180, -90);
             }
-        }
-        else if (collision.transform.tag == "shield")
-        {
-            shld rr = collision.transform.GetComponent<shld>();
-            while (rr == null)
-            {
-                Debug.Log("ekrsss");
-                rr = collision.transform.GetComponent<shld>();
-            }
-            PhotonView aa = rr.transform.GetComponent<PhotonView>();
-
-            aa.RPC("Damegede", RpcTarget.Others, DMG);
-            DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
-
-            if (PhotonNetwork.IsMasterClient)
-            {
-                yas.gameObject.transform.Rotate(90, 0, -90);
-            }
-            else
-            {
-                yas.gameObject.transform.Rotate(90, 180, -90);
-            }
 
             if (photonView.IsMine)
             {
@@ -198,7 +214,35 @@ public class Bullet : MonoBehaviourPun, IPunInstantiateMagicCallback
                 PhotonNetwork.Destroy(gameObject);
             }
         }
-        else if (collision.transform.tag == "hanbullet" || collision.transform.tag == "chobullet" || collision.transform.tag == "bullet" || collision.transform.tag == "die")
+        //else if (collision.transform.tag == "shield")
+        //{
+        //    shld rr = collision.transform.GetComponent<shld>();
+        //    while (rr == null)
+        //    {
+        //        Debug.Log("ekrsss");
+        //        rr = collision.transform.GetComponent<shld>();
+        //    }
+        //    PhotonView aa = rr.transform.GetComponent<PhotonView>();
+
+        //    aa.RPC("Damegede", RpcTarget.Others, DMG);
+        //    DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
+
+        //    if (PhotonNetwork.IsMasterClient)
+        //    {
+        //        yas.gameObject.transform.Rotate(90, 0, -90);
+        //    }
+        //    else
+        //    {
+        //        yas.gameObject.transform.Rotate(90, 180, -90);
+        //    }
+
+        //    if (photonView.IsMine)
+        //    {
+        //        if (skill != null) skill.Hit();
+        //        PhotonNetwork.Destroy(gameObject);
+        //    }
+        //}
+        else if (collision.transform.tag == "hanbullet" || collision.transform.tag == "chobullet" || collision.transform.tag == "bullet" || collision.transform.tag == "die" || collision.transform.tag == "infinity")
         {
 
             return;

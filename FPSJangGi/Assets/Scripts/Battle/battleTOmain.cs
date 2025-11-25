@@ -16,6 +16,8 @@ public class battleTOmain : MonoBehaviourPunCallbacks
 
     [SerializeField]
     private AudioMixer master;
+    [SerializeField]
+    private BattleManager gameManager;
 
     public Slider ma;
     public Slider bgm;
@@ -23,7 +25,7 @@ public class battleTOmain : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && !gameManager.isbattle)
         {
             if (!arr)
             {

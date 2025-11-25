@@ -17,7 +17,7 @@ public class destroyzone : MonoBehaviourPun
         battleManagerView = battleManager.GetComponent<PhotonView>();
 
         turnManager = FindAnyObjectByType<TurnManager>();
-        turnView = turnView.GetComponent<PhotonView>();
+        turnView = transform.GetComponent<PhotonView>();
     }
 
     public void OnTriggerEnter(Collider collision)
@@ -37,8 +37,8 @@ public class destroyzone : MonoBehaviourPun
                 battleManager.chodie();
                 //battleManagerView.RPC("chodie", RpcTarget.All);
             }
-            if(turnView == null) turnView = turnView.GetComponent<PhotonView>();
-            turnView.RPC("EndTurnRPC", RpcTarget.All); 
+            
+            
             Debug.Log(collision);
             Destroy(collision);
         }

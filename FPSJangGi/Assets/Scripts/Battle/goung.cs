@@ -217,6 +217,17 @@ public class goung : MonoBehaviourPun
         
     }
 
+    [PunRPC]
+    public void ApplyImpulse(Vector3 dir, float magnitude)
+    {
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.AddForce(dir.normalized * magnitude, ForceMode.Impulse);
+        }
+    }
+
+
     IEnumerator Fire1()
     {
         weapon1.enabled = true;
@@ -231,6 +242,8 @@ public class goung : MonoBehaviourPun
         // GameObject boom = PhotonNetwork.Instantiate(particle1.name, transform.position, Quaternion.Euler(-90, ypos, 0));//Ã£Àº ÇÁ¸®ÆÕ ¼îÄ­!
         cooldown = delay;
         StartCoroutine(attectcool());
+        
+        
         yield break;
         
         
@@ -250,9 +263,19 @@ public class goung : MonoBehaviourPun
         //GameObject boom = PhotonNetwork.Instantiate(particle1.name, transform.position, Quaternion.Euler(90, ypos, 180));//Ã£Àº ÇÁ¸®ÆÕ ¼îÄ­!
         cooldown = delay;
         StartCoroutine(attectcool());
+        
+        
         yield break;
         
         
+    }
+    [PunRPC]
+    void attecool()
+    {
+        particle1.enabled = false;
+        weapon1.enabled = false;
+        weapon2.enabled = false;
+        isfire = false;
     }
 
     [PunRPC]
@@ -338,10 +361,8 @@ public class goung : MonoBehaviourPun
             cooldown -= Time.deltaTime;
             yield return null;
         }
-        particle1.enabled = false;
-        weapon1.enabled = false;
-        weapon2.enabled = false;
-        isfire = false;
+        photonView.RPC("attecool", RpcTarget.All);
+
     }
 
     IEnumerator CooldownTimer()
@@ -371,9 +392,10 @@ public class goung : MonoBehaviourPun
     }
 
     [PunRPC]
-    public void dokkislow(int dmg)
+    public void dokkislow(float dmg)
     {
-        HP -= dmg;
+        HP -= (int)dmg;
+        photonView.RPC("hpview", RpcTarget.Others, HP);
         StartCoroutine(slow());
         
     }
@@ -381,6 +403,7 @@ public class goung : MonoBehaviourPun
     IEnumerator slow()
     {
         moveSpeed -= 0.5f;
+        
         yield return new WaitForSeconds(2);
         moveSpeed += 0.5f;
     }

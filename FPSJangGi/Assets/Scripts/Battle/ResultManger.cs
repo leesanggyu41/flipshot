@@ -12,6 +12,7 @@ public class ResultManger : MonoBehaviourPun
     public TMP_Text result_text;
     private string result;
     public bool Win = false;
+    public bool isendBattle = false;
     
     public BattleManager battleManager;
     public BattleStone battleStone;
@@ -23,7 +24,9 @@ public class ResultManger : MonoBehaviourPun
 
     private void Update()
     {
-        turnManager = FindAnyObjectByType<TurnManager>();
+        if (turnManager == null) {turnManager = FindAnyObjectByType<TurnManager>(); }
+            
+    
         if(battleManager == null)
         {
             battleManager = FindAnyObjectByType<BattleManager>();
@@ -41,7 +44,11 @@ public class ResultManger : MonoBehaviourPun
     [PunRPC]
     public void endbattle(int a)
     {
-
+        Debug.Log("½ÂÆÐ °áÁ¤µÊ");
+        if (!isendBattle)
+        {
+        isendBattle = true;
+            Debug.Log("°áÁ¤Áß");
         Debug.Log(a);
         if (a == 7)
         {
@@ -54,6 +61,8 @@ public class ResultManger : MonoBehaviourPun
             StartCoroutine(waitt());
         }
         Debug.Log(result);
+        }
+
         
     }
 
@@ -61,19 +70,19 @@ public class ResultManger : MonoBehaviourPun
 
     IEnumerator waitt()
     {
-        
-        yield return new WaitForSeconds(0.2f);
+
+        yield return null;
         battleStone = FindAnyObjectByType<BattleStone>();
         Goung = FindAnyObjectByType<goung>();
         BA = FindAnyObjectByType<battlesang>();
 
         if (result == "cho")
         {
-            if (Goung == null && BA == null)
+            if (Goung == null && BA == null && battleStone != null)
                 battleStone.HP = battleStone.Maxhp;
-            else if (battleStone == null && BA == null)
+            else if (battleStone == null && BA == null && Goung != null)
                 Goung.HP = Goung.Maxhp;
-            else if (Goung == null && battleStone == null)
+            else if (Goung == null && battleStone == null && BA != null)
                 BA.HP = BA.Maxhp;
             Debug.Log("ÃÊ³ª¶ó ½Â¸®");
             Win = false;
@@ -83,13 +92,14 @@ public class ResultManger : MonoBehaviourPun
             battleSpawner.sexton = false;
             battleManager.isbattle = false;
             result_text.text = "";
-            if (Goung == null && BA == null)
+            if (Goung == null && BA == null && battleStone != null)
                 battleStone.delete();
-            else if (battleStone == null && BA == null)
+            else if (battleStone == null && BA == null && Goung != null)
                 Goung.delete();
-            else if (Goung == null && battleStone == null)
+            else if (Goung == null && battleStone == null && BA != null)
                 BA.delete();
-            
+            isendBattle = false;
+
             //battleManagerView.RPC("Alkagimove", RpcTarget.All);
 
             battleManager.Alkagimove();
@@ -101,11 +111,11 @@ public class ResultManger : MonoBehaviourPun
         }
         else if (result == "han")
         {
-            if (Goung == null && BA == null)
+            if (Goung == null && BA == null && battleStone != null)
                 battleStone.HP = battleStone.Maxhp;
-            else if (battleStone == null && BA == null)
+            else if (battleStone == null && BA == null && Goung != null)
                 Goung.HP = Goung.Maxhp;
-            else if (Goung == null && battleStone == null)
+            else if (Goung == null && battleStone == null && BA != null)
                 BA.HP = BA.Maxhp;
             Debug.Log("ÇÑ³ª¶ó ½Â¸®");
             Win = true;
@@ -115,13 +125,13 @@ public class ResultManger : MonoBehaviourPun
             battleSpawner.sexton = false;
             battleManager.isbattle = false;
             result_text.text = "";
-            if (Goung == null && BA == null)
+            if (Goung == null && BA == null && battleStone != null)
                 battleStone.delete();
-            else if (battleStone == null && BA == null)
+            else if (battleStone == null && BA == null && Goung != null)
             Goung.delete();
-            else if (Goung == null && battleStone == null)
+            else if (Goung == null && battleStone == null && BA != null)
                 BA.delete();
-
+            isendBattle = false;
 
             //battleManagerView.RPC("Alkagimove", RpcTarget.All);
             battleManager.Alkagimove();

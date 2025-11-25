@@ -3,6 +3,7 @@ using Photon.Pun;
 using DamageNumbersPro;
 using Unity.VisualScripting;
 
+
 public class Slow : MonoBehaviourPun
 {
     public DamageNumber number;
@@ -30,7 +31,37 @@ public class Slow : MonoBehaviourPun
         transform.position += transform.up * speed * Time.deltaTime;
 
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.transform.tag == "shield")
+        {
+            shld rr = other.transform.GetComponent<shld>();
+            while (rr == null)
+            {
+                Debug.Log("ekrsss");
+                rr = other.transform.GetComponent<shld>();
+            }
+            PhotonView aa = rr.transform.GetComponent<PhotonView>();
 
+            aa.RPC("Dameged", RpcTarget.Others, DMG);
+            DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                yas.gameObject.transform.Rotate(90, 0, -90);
+            }
+            else
+            {
+                yas.gameObject.transform.Rotate(90, 180, -90);
+            }
+
+            if (photonView.IsMine)
+            {
+               
+                PhotonNetwork.Destroy(gameObject);
+            }
+        }
+    }
     void OnCollisionEnter(Collision collision)
     {
         if (collision.transform.tag == transform.tag) return;
@@ -97,7 +128,7 @@ public class Slow : MonoBehaviourPun
             }
             
             PhotonView rr = aa.transform.GetComponent<PhotonView>();
-            rr.RPC("dokkislow", RpcTarget.Others, DMG);
+            rr.RPC("dokkislow", RpcTarget.Others, (float)DMG);
             DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
 
             if (PhotonNetwork.IsMasterClient)
@@ -109,33 +140,33 @@ public class Slow : MonoBehaviourPun
                 yas.gameObject.transform.Rotate(90, 180, -90);
             }
         }
-        else if (collision.transform.tag == "shield")
-        {
-            shld rr = collision.transform.GetComponent<shld>();
-            while (rr == null)
-            {
-                rr = collision.transform.GetComponent<shld>();
-            }
-            PhotonView aa = rr.transform.GetComponent<PhotonView>();
-            aa.RPC("Dameged", RpcTarget.Others, DMG);
-            DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
+        //else if (collision.transform.tag == "shield")
+        //{
+        //    shld rr = collision.transform.GetComponent<shld>();
+        //    while (rr == null)
+        //    {
+        //        rr = collision.transform.GetComponent<shld>();
+        //    }
+        //    PhotonView aa = rr.transform.GetComponent<PhotonView>();
+        //    aa.RPC("Dameged", RpcTarget.Others, DMG);
+        //    DamageNumber yas = number.Spawn(gameObject.transform.position, DMG);
 
-            if (PhotonNetwork.IsMasterClient)
-            {
-                yas.gameObject.transform.Rotate(90, 0, -90);
-            }
-            else
-            {
-                yas.gameObject.transform.Rotate(90, 180, -90);
-            }
+        //    if (PhotonNetwork.IsMasterClient)
+        //    {
+        //        yas.gameObject.transform.Rotate(90, 0, -90);
+        //    }
+        //    else
+        //    {
+        //        yas.gameObject.transform.Rotate(90, 180, -90);
+        //    }
 
-            if (photonView.IsMine)
-            {
+        //    if (photonView.IsMine)
+        //    {
                 
-                PhotonNetwork.Destroy(gameObject);
-            }
-        }
-        else if (collision.transform.tag == "hanbullet" || collision.transform.tag == "chobullet" || collision.transform.tag == "bullet" || collision.transform.tag== "die")
+        //        PhotonNetwork.Destroy(gameObject);
+        //    }
+        //}
+        else if (collision.transform.tag == "hanbullet" || collision.transform.tag == "chobullet" || collision.transform.tag == "bullet" || collision.transform.tag== "die" || collision.transform.tag == "infinity")
         {
 
             return;
@@ -161,7 +192,7 @@ public class Slow : MonoBehaviourPun
             {
                 yas.gameObject.transform.Rotate(90, 180, -90);
             }
-            rr.RPC("dokkislow", RpcTarget.Others, DMG);
+            rr.RPC("dokkislow", RpcTarget.Others, (float)DMG);
             
             if (photonView.IsMine)
             {

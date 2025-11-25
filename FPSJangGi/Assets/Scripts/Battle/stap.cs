@@ -32,7 +32,7 @@ public class stap : MonoBehaviourPun
         {
             return;
         }
-        else if (other.tag == "hanbullet" || other.tag == "chobullet" || other.tag == "bullet")
+        else if (other.tag == "hanbullet" || other.tag == "chobullet" || other.tag == "bullet" || other.tag == "infinity")
         {
 
             return;

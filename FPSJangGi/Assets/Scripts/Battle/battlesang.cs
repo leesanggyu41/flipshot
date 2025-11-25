@@ -60,6 +60,9 @@ public class battlesang : MonoBehaviourPun
 
     public GameObject dieob;
 
+    private int Layerbunho;
+    private string tagbunho;
+
     private void Awake()
     {
         aaa = FindAnyObjectByType<BattleUi>();
@@ -140,7 +143,8 @@ public class battlesang : MonoBehaviourPun
                 
                 PhotonView shieldPV = sh.GetComponent<PhotonView>();
                 shieldPV.RPC("SetParentRPC", RpcTarget.AllBuffered, photonView.ViewID);
-                
+
+                photonView.RPC("shiler", RpcTarget.All);
                 schtime = 0;
 
             }
@@ -197,18 +201,41 @@ public class battlesang : MonoBehaviourPun
 
                     //bulletObj.tag = "hanbullet";
                 }
-            
+
 
         }
 
 
-        
+
 
 
 
 
     }
+    [PunRPC]
+    public void ApplyImpulse(Vector3 dir, float magnitude)
+    {
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.AddForce(dir.normalized * magnitude, ForceMode.Impulse);
+        }
+    }
 
+    [PunRPC]
+    public void shiler()
+    {
+        tagbunho = transform.tag;
+        Layerbunho = gameObject.layer;
+        
+        transform.tag = "infinity";
+    }
+    [PunRPC]
+    public void unshiler()
+    {
+        gameObject.layer = Layerbunho;
+        transform.tag = tagbunho;
+    }
     IEnumerator Fire1()
     {
         isfire = true;
@@ -289,12 +316,12 @@ public class battlesang : MonoBehaviourPun
         schtime = 0;
     }
     [PunRPC]
-    public void dokkislow(int dmg)
+    public void dokkislow(float dmg)
     {
-        
-        HP -= dmg;
-        schtime = 0;
+        HP -= (int)dmg;
+        photonView.RPC("hpview", RpcTarget.Others, HP);
         StartCoroutine(slow());
+
     }
 
     IEnumerator slow()
