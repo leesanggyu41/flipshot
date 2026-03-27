@@ -48,11 +48,13 @@ FLIPSHOT은 한국 전통 놀이인 **'알까기'**와 역동적인 **'슈팅 �
   
 * 🛠 기술 스택항목내용
   
-* 엔진Unity 3D (Physics & URP)
+* 엔진 Unity 3D (Physics & URP)
   
-* 언어C#
+* 언어 C#
   
-* 물리Unity Physics (알까기 타격감 구현)
+* 물리 Unity Physics (알까기 타격감 구현)
+  
+* 멀티 PhotonPun2
  
 
   
