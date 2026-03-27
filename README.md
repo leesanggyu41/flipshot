@@ -51,7 +51,7 @@ FLIPSHOT은 한국 전통 놀이인 **'알까기'**와 역동적인 **'슈팅 �
   
 * 물리Unity Physics (알까기 타격감 구현)
  
-* 장르Turn-based Strategy + Bullet Hell
+
   
 ---
 
