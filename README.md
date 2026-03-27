@@ -64,15 +64,15 @@ FLIPSHOT은 한국 전통 놀이인 **'알까기'**와 역동적인 **'슈팅 �
 
 역할이름/GitHub
 
-메인 클라이언트 개발 @leesanggyu41
+메인 클라이언트 개발 [@leesanggyu41](https://github.com/leesanggyu41)
 
-디자인 @eeieememd
+디자인 [@eeieememd](https://github.com/eeieemdmd)
 
-기획 @
+기획 [@]
 
-UI/연출 @Kjw08
+UI/연출 [@Kjw08](https://github.com/Kjw08)
 
-편의기능 개발 @
+편의기능 개발 [@]
 
 
 📄 라이선스본 프로젝트는 2025 캡스톤 개발 프로젝트입니다. 
