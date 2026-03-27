@@ -46,14 +46,7 @@ FLIPSHOT은 한국 전통 놀이인 **'알까기'**와 역동적인 **'슈팅 �
  
 * 장르Turn-based Strategy + Bullet Hell
   
-* 📁 프로젝트 구조Plaintextflipshot/
-├── Assets/
-│   ├── Scripts/
-│   │   ├── AlKkagi/          # 알까기 물리 및 조작 로직
-│   │   ├── Shooting/         # 슈팅 모드 전환 및 탄막 로직
-│   │   └── GameManagement/   # 모드 전환(Flip) 매니저
-│   ├── Prefabs/              # 장기알 오브젝트 및 탄환 프리팹
-│   └── Scenes/               # 메인/대전 씬
+
 👥 팀원
 
 역할이름/GitHub
