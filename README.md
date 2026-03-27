@@ -1,4 +1,6 @@
-# ⚪ FLIPSHOT: Al-Kkagi Shooter"장기알에 담긴 탄환, 판을 뒤엎는 한 수"
+# ⚪ FLIPSHOT: Al-Kkagi Shooter
+
+## "장기알에 담긴 탄환, 판을 뒤엎는 한 수"
 
 알까기로 각을 재고, 슈팅으로 승부를 결정짓는 하이브리드 액션 게임
 
@@ -68,11 +70,11 @@ FLIPSHOT은 한국 전통 놀이인 **'알까기'**와 역동적인 **'슈팅 �
 
 디자인 [@eeieememd](https://github.com/eeieemdmd)
 
-기획 [@]
+기획 [@]()
 
 UI/연출 [@Kjw08](https://github.com/Kjw08)
 
-편의기능 개발 [@]
+편의기능 개발 [@]()
 
 
 📄 라이선스본 프로젝트는 2025 캡스톤 개발 프로젝트입니다. 
